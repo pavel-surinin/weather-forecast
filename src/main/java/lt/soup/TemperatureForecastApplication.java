@@ -3,12 +3,8 @@ package lt.soup;
 import lt.soup.web.resources.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import rx.Observable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * Created by Pavel on 2017-04-19.
@@ -21,15 +17,20 @@ public class TemperatureForecastApplication {
     public void start() {
         logger.info("Application Temperature Forecast is started");
 
-        getTemperature(new England(), "London","Glasgow");
-        getTemperature(new Lithuania(), "Vilnius","Klaipeda","Kaunas");
-        getTemperature(new France(), "Paris","Lille");
-        getTemperature(new Poland(), "Poznan","Warsaw");
+        getTemperature(new England(), "London", "Glasgow");
+        getTemperature(new Lithuania(), "Vilnius", "Klaipeda", "Kaunas");
+        getTemperature(new France(), "Paris", "Lille");
+        getTemperature(new Poland(), "Poznan", "Warsaw");
+
     }
 
-    private Forecast getTemperature(WebResource resource, String... cities) {
-        logger.info("Scrapping " + resource.getCountry() + " in " + city + " with " + NAME);
-            return resource.getForecast(city);
+    private ArrayList<Forecast> getTemperature(WebResource resource, String... cities) {
+        ArrayList<Forecast> forecasts = new ArrayList<>();
+        for (String city : cities) {
+            forecasts.add(resource.getForecast(city));
+            logger.info("Scrapping " + resource.getCountry() + " in " + city + " with " + NAME);
+        }
+        return forecasts;
     }
 }
 
