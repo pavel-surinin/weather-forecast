@@ -8,8 +8,7 @@ import java.util.Date;
 public class Forecast {
 
     private String city;
-    private String webResource;
-
+    private String country;
     private Float day3Max;
     private Float day3Min;
     private Float day7Max;
@@ -17,7 +16,7 @@ public class Forecast {
     private Date date;
 
     public Forecast(String webResource, String city) {
-        this.webResource = webResource;
+        this.country = webResource;
         this.city = city;
         this.date = new Date();
     }
@@ -56,5 +55,17 @@ public class Forecast {
 
     public Date getDateScrapped() {
         return this.date;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }

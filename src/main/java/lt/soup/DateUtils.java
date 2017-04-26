@@ -62,4 +62,17 @@ public class DateUtils {
         return Integer.valueOf(day) + " " + monthSW;
     }
 
+    /**
+     * Add days and return new Date obj
+     * @param days  number of days to be added
+     * @return      Date obj wi added ammount of days
+     */
+    public static Date getDateAdd(int days) {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, days);
+        dt = c.getTime();
+        return dt;
+    }
 }
