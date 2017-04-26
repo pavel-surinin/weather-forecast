@@ -44,7 +44,10 @@ public class France implements WebResource {
     private Float get7Day(int num) {
         String c = cityPage
                 .getElementById("detail-table-forecast")
-                .getElementsContainingOwnText("C")
+                .getElementsContainingOwnText("Température")
+                .get(0)
+                .parent()
+                .children()
                 .get(2)
                 .text();
         String temperature = c.split(" ")[num];

@@ -37,6 +37,7 @@ public class Poland implements WebResource {
             return forecast;
         } catch (Exception e){
             LoggerUtils.logFailedScrap(logger,city);
+            System.out.println(e);
             return null;
         }
     }
