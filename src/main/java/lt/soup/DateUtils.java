@@ -32,7 +32,7 @@ public class DateUtils {
      * Parses date to other format adding days passed to params
      *
      * @param numberOfDays  number of days to add
-     * @return              date in  dd MMMM(01 january) format as String
+     * @return              date in  dd MMMM(1 january) format as String
      */
     public static String getDateAddForPl(int numberOfDays){
         Date dt = new Date();
@@ -41,7 +41,10 @@ public class DateUtils {
         c.add(Calendar.DATE, numberOfDays);
         dt = c.getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd MMMM", Locale.US);
-        return dateFormat.format(dt);
+        String date = dateFormat.format(dt);
+        String day = date.split(" ")[0];
+        String month = date.split(" ")[1];
+        return Integer.valueOf(day) + " " + month;
     }
 
     /**

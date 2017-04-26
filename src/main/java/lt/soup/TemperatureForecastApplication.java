@@ -27,8 +27,8 @@ public class TemperatureForecastApplication {
     private ArrayList<Forecast> getTemperature(WebResource resource, String... cities) {
         ArrayList<Forecast> forecasts = new ArrayList<>();
         for (String city : cities) {
-            forecasts.add(resource.getForecast(city));
             logger.info("Scrapping " + resource.getCountry() + " in " + city + " with " + NAME);
+            forecasts.add(resource.getForecast(city));
         }
         return forecasts;
     }

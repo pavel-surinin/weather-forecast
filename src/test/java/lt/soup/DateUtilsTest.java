@@ -32,6 +32,7 @@ public class DateUtilsTest {
             Integer day = Integer.valueOf(date.split(" ")[0]);
             assertTrue(day > 0 && day < 32);
             assertTrue(months.contains(date.split(" ")[1]));
+            assertThat(date.startsWith("0"), is(false));
         }
     }
 

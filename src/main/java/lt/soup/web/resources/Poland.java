@@ -45,11 +45,12 @@ public class Poland implements WebResource {
     private Float get7day(String minOrMax) {
         Document cityPage610 = SoupUtils.getPage(cityPage.location() + "/6_10/");
         String temperature = cityPage610
-                .getElementsByClass("someDayOffWeek")
+                .getElementsByClass("dayoffMonth")
                 .stream()
                 .filter(e -> e.getElementsContainingOwnText(DateUtils.getDateAddForPl(6)).size() > 0)
                 .findFirst()
                 .get()
+                .parent()
                 .getElementsByClass(minOrMax)
                 .text()
                 .replace("°C","");
