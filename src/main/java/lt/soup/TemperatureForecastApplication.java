@@ -1,6 +1,8 @@
 package lt.soup;
 
-import lt.soup.web.resources.*;
+import lt.soup.weather.data.WeatherData;
+import lt.soup.weather.data.WeatherDataFactory;
+import lt.soup.web.resources.WebResource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -12,25 +14,30 @@ import java.util.ArrayList;
 public class TemperatureForecastApplication {
 
     private final Logger logger = LogManager.getLogger(TemperatureForecastApplication.class);
-    private final String NAME = "Temperature Scrapper";
+    private static final String NAME = "Temperature Scrapper";
+    private ArrayList<Forecast> forecasts = new ArrayList<>();
 
-    public void start() {
+
+    public TemperatureForecastApplication start() {
         logger.info("Application Temperature Forecast is started");
-
-        getTemperature(new England(), "London", "Glasgow");
-        getTemperature(new Lithuania(), "Vilnius", "Klaipeda", "Kaunas");
-        getTemperature(new France(), "Paris", "Lille");
-        getTemperature(new Poland(), "Poznan", "Warsaw");
-
+        return this;
     }
 
-    private ArrayList<Forecast> getTemperature(WebResource resource, String... cities) {
-        ArrayList<Forecast> forecasts = new ArrayList<>();
+    public TemperatureForecastApplication scrap(WebResource resource, String... cities) {
         for (String city : cities) {
             logger.info("Scrapping " + resource.getCountry() + " in " + city + " with " + NAME);
             forecasts.add(resource.getForecast(city));
         }
+        return this;
+    }
+
+
+    public ArrayList<Forecast> getForecasts() {
         return forecasts;
+    }
+
+    public ArrayList<WeatherData> getWeatherDataList(){
+        return new WeatherDataFactory(forecasts).getDataList();
     }
 }
 

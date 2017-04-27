@@ -6,9 +6,7 @@ import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -24,33 +22,23 @@ public class WeatherDataFactoryTest {
     private static final float DAY_3_MIN = 10F;
     private static final float DAY_7_MAX = 22F;
     private static final float DAY_7_MIN = 12F;
-    private static final String LONDON = "London";
-    private static final String ENGLAND = "England";
     private Forecast forecastLT = new Forecast(LITHUANIA, VILNIUS);
-    private Forecast forecastEN = new Forecast(ENGLAND, LONDON);
-
-    private WeatherDataFactory weatherDataFactory = new WeatherDataFactory(forecastLT);
+    WeatherDataFactory weatherDataFactory;
 
     @Before
     public void setUp() {
+        ArrayList<Forecast> forecasts = new ArrayList<>(Arrays.asList(forecastLT));
+        weatherDataFactory = new WeatherDataFactory(forecasts);
         forecastLT.setDay3Max(DAY_3_MAX);
         forecastLT.setDay3Min(DAY_3_MIN);
         forecastLT.setDay7Max(DAY_7_MAX);
         forecastLT.setDay7Min(DAY_7_MIN);
-        forecastEN.setDay3Max(DAY_3_MAX);
-        forecastEN.setDay3Min(DAY_3_MIN);
-        forecastEN.setDay7Max(DAY_7_MAX);
-        forecastEN.setDay7Min(DAY_7_MIN);
     }
 
     @Test
     public void shouldReturnCorrectListSize() {
         ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
         assertThat(dataList.size(), is(4));
-        weatherDataFactory = new WeatherDataFactory(forecastEN,forecastLT);
-        ArrayList<WeatherData> dataList8 = weatherDataFactory.getDataList();
-        assertThat(dataList8.size(), is(8));
-
     }
 
     @Test

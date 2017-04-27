@@ -1,8 +1,5 @@
 package lt.soup;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
 /**
  * Created by Pavel on 2017-04-18.
  */

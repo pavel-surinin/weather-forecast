@@ -12,11 +12,11 @@ public class WeatherDataFactory {
 
     private static final int DAYS3 = 2;
     private static final int DAYS7 = 6;
-    private Forecast[] forecasts;
+    private ArrayList<Forecast> forecasts;
     private ArrayList<WeatherData> dataList = new ArrayList();
 
-    public WeatherDataFactory(Forecast... fcs){
-        this.forecasts = fcs;
+    public WeatherDataFactory(ArrayList<Forecast> forecasts) {
+        this.forecasts = forecasts;
     }
 
     public ArrayList<WeatherData> getDataList() {
