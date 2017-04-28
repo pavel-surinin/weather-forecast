@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class WeatherData {
 
+    private Long id;
     private String city;
     private String country;
     private Date date;
@@ -61,5 +62,14 @@ public class WeatherData {
     public void setTemperature(Float temperature) {
         this.temperature = temperature;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
+
 

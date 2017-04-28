@@ -1,5 +1,7 @@
 package lt.soup;
 
+import lt.soup.db.Database;
+import lt.soup.db.InMemoryDB;
 import lt.soup.weather.data.WeatherData;
 import lt.soup.web.resources.England;
 import lt.soup.web.resources.France;
@@ -22,7 +24,6 @@ public class TemperatureForecastApplicationTest {
         ArrayList<Forecast> fcs = new TemperatureForecastApplication()
                 .start()
                 .scrap(new England(), "London", "Glasgow")
-                .scrap(new Lithuania(), "Vilnius", "Klaipeda", "Kaunas")
                 .getForecasts();
 
         assertThat(fcs.size(), is(5));
@@ -39,6 +40,18 @@ public class TemperatureForecastApplicationTest {
 
         assertThat(wdl.size(), is(16));
         assertThat(wdl, notNullValue());
+    }
+
+    @Test
+    public void shouldScrapSaveToDatabase() {
+        Database db = new InMemoryDB();
+        ArrayList<WeatherData> wdl = new TemperatureForecastApplication()
+                .start()
+                .scrap(new Lithuania(), "Vilnius", "Klaipeda", "Kaunas")
+                .saveToDatabase(db)
+                .getWeatherDataList();
+
+        assertThat(db.findAll().size(), is(12));
     }
 
 }

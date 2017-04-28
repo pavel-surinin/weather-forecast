@@ -75,4 +75,13 @@ public class DateUtils {
         dt = c.getTime();
         return dt;
     }
+
+    public static String getDateAsString(Date dt) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        dt = c.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("YYYY MM dd");
+        String date = dateFormat.format(dt);
+        return date;
+    }
 }

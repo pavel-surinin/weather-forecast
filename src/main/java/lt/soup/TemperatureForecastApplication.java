@@ -1,5 +1,6 @@
 package lt.soup;
 
+import lt.soup.db.Database;
 import lt.soup.weather.data.WeatherData;
 import lt.soup.weather.data.WeatherDataFactory;
 import lt.soup.web.resources.WebResource;
@@ -31,6 +32,10 @@ public class TemperatureForecastApplication {
         return this;
     }
 
+    public TemperatureForecastApplication saveToDatabase(Database database){
+        getWeatherDataList().forEach(database::save);
+        return this;
+    }
 
     public ArrayList<Forecast> getForecasts() {
         return forecasts;
