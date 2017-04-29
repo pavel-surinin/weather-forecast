@@ -37,6 +37,11 @@ public class InMemoryDB implements Database {
         return weatherData;
     }
 
+    @Override
+    public void deleteAll() {
+        data.clear();
+    }
+
     private boolean isNewRecord(WeatherData line) {
         long foundRecords = data.stream()
                 .filter(r -> r.getCity().equals(line.getCity()))

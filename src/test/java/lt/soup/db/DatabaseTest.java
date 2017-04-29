@@ -1,5 +1,6 @@
 package lt.soup.db;
 
+import lt.soup.DateUtils;
 import lt.soup.weather.data.WeatherData;
 import lt.soup.weather.data.WeatherGetType;
 import lt.soup.weather.data.WeatherMinMax;
@@ -27,6 +28,8 @@ public abstract class DatabaseTest {
 
     @Before
     public void setUp(){
+        database.deleteAll();
+
         vilniusWeatherDataMin.setWeatherGetType(WeatherGetType.FORECAST);
         vilniusWeatherDataMin.setWeatherMinMax(WeatherMinMax.MIN);
         vilniusWeatherDataMin.setTemperature(MIN_TEMP);
@@ -43,21 +46,42 @@ public abstract class DatabaseTest {
     }
 
     @Test
-    public void shuoldSaveToDatabase(){
+    public void shouldSaveToDatabase(){
         database.save(vilniusWeatherDataMax);
         database.save(vilniusWeatherDataMin);
         assertThat(database.findAll().size(), is(2));
+        assertThat(database.findById(1L).getWeatherMinMax(), is(WeatherMinMax.MAX));
+        assertThat(database.findById(2L).getWeatherMinMax(), is(WeatherMinMax.MIN));
         assertThat(database.findById(1L).getWeatherMinMax(), is(vilniusWeatherDataMax.getWeatherMinMax()));
-        assertThat(database.findById(2L).getWeatherMinMax(), is(vilniusWeatherDataMin.getWeatherMinMax()));
+        assertThat(database.findById(1L).getTemperature(), is(vilniusWeatherDataMax.getTemperature()));
+        assertThat(database.findById(1L).getCity(), is(vilniusWeatherDataMax.getCity()));
+        assertThat(database.findById(1L).getCountry(), is(vilniusWeatherDataMax.getCountry()));
+        assertThat(database.findById(1L).getWeatherGetType(), is(vilniusWeatherDataMax.getWeatherGetType()));
+        assertThat(DateUtils.getDateAsString(database.findById(1L).getDate()), is(DateUtils.getDateAsString(vilniusWeatherDataMax.getDate())));
+
     }
 
     @Test
-    public void shuoldSaveToDatabaseOnlyOne(){
+    public void shouldSaveToDatabaseOnlyOne(){
         database.save(vilniusWeatherDataMax);
         database.save(vilniusWeatherDataMax);
         assertFalse(database.save(vilniusWeatherDataMax));
         assertThat(database.findAll().size(), is(1));
         assertThat(database.findById(1L).getWeatherMinMax(), is(vilniusWeatherDataMax.getWeatherMinMax()));
+        assertThat(database.findById(1L).getTemperature(), is(vilniusWeatherDataMax.getTemperature()));
+        assertThat(database.findById(1L).getCity(), is(vilniusWeatherDataMax.getCity()));
+        assertThat(database.findById(1L).getCountry(), is(vilniusWeatherDataMax.getCountry()));
+        assertThat(database.findById(1L).getWeatherGetType(), is(vilniusWeatherDataMax.getWeatherGetType()));
+        assertThat(DateUtils.getDateAsString(database.findById(1L).getDate()), is(DateUtils.getDateAsString(vilniusWeatherDataMax.getDate())));
+    }
+
+    @Test
+    public void shouldDeleteAllRecords(){
+        database.save(vilniusWeatherDataMax);
+        assertThat(database.findAll().size(), is(1));
+        database.deleteAll();
+        assertThat(database.findAll().size(), is(0));
+
     }
 
     public void setDatabase(Database databaseImpl){

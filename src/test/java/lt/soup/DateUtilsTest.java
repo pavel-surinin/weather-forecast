@@ -1,9 +1,9 @@
 package lt.soup;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +16,8 @@ import static org.junit.Assert.assertTrue;
  * Created by Pavel on 2017-04-23.
  */
 public class DateUtilsTest {
+
+    private static final String DATE19990903 = "1999 09 03";
 
     @Test
     public void getDateAddForLithuania() throws Exception {
@@ -46,5 +48,29 @@ public class DateUtilsTest {
             assertTrue(months.contains(date.split(" ")[1]));
             assertThat(date.startsWith("0"), is(false));
         }
+    }
+
+    @Test
+    public void getDateFromString(){
+        Date date = DateUtils.getDateFromString(DATE19990903);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        assertThat(year, is(1999));
+        assertThat(month, is(8));
+        assertThat(day, is(3));
+    }
+
+    @Test
+    public void getDateAsString(){
+        String dateAsString = DateUtils.getDateAsString(DateUtils.getDateFromString(DATE19990903));
+        String[] split = dateAsString.split(" ");
+
+        assertThat(split[0], is("1999"));
+        assertThat(split[1], is("09"));
+        assertThat(split[2], is("03"));
     }
 }

@@ -70,6 +70,19 @@ public class WeatherData {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "WeatherData{" +
+                "id=" + id +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", date=" + date +
+                ", weatherGetType=" + weatherGetType +
+                ", weatherMinMax=" + weatherMinMax +
+                ", temperature=" + temperature +
+                '}';
+    }
 }
 
 

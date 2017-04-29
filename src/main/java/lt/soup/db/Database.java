@@ -15,4 +15,5 @@ public interface Database {
 
     WeatherData findById(Long id);
 
+    void deleteAll();
 }

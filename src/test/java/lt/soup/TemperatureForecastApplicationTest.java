@@ -26,7 +26,7 @@ public class TemperatureForecastApplicationTest {
                 .scrap(new England(), "London", "Glasgow")
                 .getForecasts();
 
-        assertThat(fcs.size(), is(5));
+        assertThat(fcs.size(), is(2));
         assertThat(fcs, notNullValue());
     }
 
