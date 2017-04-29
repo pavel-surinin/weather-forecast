@@ -1,5 +1,6 @@
 package lt.soup.weather.data;
 
+import lt.soup.DateUtils;
 import lt.soup.Forecast;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,6 +8,7 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -22,6 +24,8 @@ public class WeatherDataFactoryTest {
     private static final float DAY_3_MIN = 10F;
     private static final float DAY_7_MAX = 22F;
     private static final float DAY_7_MIN = 12F;
+    public static final int DAYS3 = 2;
+    public static final int DAYS7 = 6;
     private Forecast forecastLT = new Forecast(LITHUANIA, VILNIUS);
     WeatherDataFactory weatherDataFactory;
 
@@ -33,6 +37,29 @@ public class WeatherDataFactoryTest {
         forecastLT.setDay3Min(DAY_3_MIN);
         forecastLT.setDay7Max(DAY_7_MAX);
         forecastLT.setDay7Min(DAY_7_MIN);
+    }
+
+    @Test
+    public void shouldSetValidDates(){
+        ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
+        assertThat(isDatePresent(dataList,DAYS7), is(true));
+        assertThat(isDatePresent(dataList,DAYS3), is(true));
+
+    }
+
+    private boolean isDatePresent(ArrayList<WeatherData> dataList, int days) {
+        return dataList
+                .stream()
+                .anyMatch(d-> {
+                    Date dt = new Date();
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(dt);
+                    c.add(Calendar.DATE, days);
+                    dt = c.getTime();
+                    String today = DateUtils.getDateAsString(dt);
+                    String later = DateUtils.getDateAsString(d.getDate());
+                    return today.equals(later);
+                });
     }
 
     @Test

@@ -57,6 +57,5 @@ public abstract class WebResourceTest {
         Forecast forecast = webResource.getForecast(city);
         Date date = forecast.getDateScrapped();
         assertThat(date, instanceOf(Date.class));
-        assertThat(date.compareTo(new Date()), is(-1));
     }
 }
