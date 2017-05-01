@@ -1,5 +1,6 @@
 package lt.soup;
 
+import lt.soup.analytics.AnalyticsReport;
 import lt.soup.db.Database;
 import lt.soup.weather.data.WeatherData;
 import lt.soup.weather.data.WeatherDataFactory;
@@ -17,6 +18,7 @@ public class TemperatureForecastApplication {
     private final Logger logger = LogManager.getLogger(TemperatureForecastApplication.class);
     private static final String NAME = "Temperature Scrapper";
     private ArrayList<Forecast> forecasts = new ArrayList<>();
+    private Database database;
 
 
     public TemperatureForecastApplication start() {
@@ -32,7 +34,12 @@ public class TemperatureForecastApplication {
         return this;
     }
 
-    public TemperatureForecastApplication saveToDatabase(Database database){
+    public TemperatureForecastApplication setDatabase(Database database){
+        this.database = database;
+        return this;
+    }
+
+    public TemperatureForecastApplication saveToDatabase(){
         getWeatherDataList().forEach(database::save);
         return this;
     }
@@ -43,6 +50,11 @@ public class TemperatureForecastApplication {
 
     public ArrayList<WeatherData> getWeatherDataList(){
         return new WeatherDataFactory(forecasts).getDataList();
+    }
+
+    public AnalyticsReport analize(){
+
+        return new AnalyticsReport();
     }
 }
 

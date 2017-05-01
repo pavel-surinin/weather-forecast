@@ -47,8 +47,9 @@ public class TemperatureForecastApplicationTest {
         Database db = new InMemoryDB();
         ArrayList<WeatherData> wdl = new TemperatureForecastApplication()
                 .start()
+                .setDatabase(db)
                 .scrap(new Lithuania(), "Vilnius", "Klaipeda", "Kaunas")
-                .saveToDatabase(db)
+                .saveToDatabase()
                 .getWeatherDataList();
 
         assertThat(db.findAll().size(), is(12));
