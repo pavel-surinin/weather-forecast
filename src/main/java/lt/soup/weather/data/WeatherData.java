@@ -12,7 +12,7 @@ public class WeatherData {
     private String country;
     private Date date;
     private WeatherGetType weatherGetType;
-    private WeatherMinMax weatherMinMax;
+    private Level level;
     private Float temperature;
 
     public String getCity() {
@@ -47,12 +47,12 @@ public class WeatherData {
         this.weatherGetType = weatherGetType;
     }
 
-    public WeatherMinMax getWeatherMinMax() {
-        return weatherMinMax;
+    public Level getLevel() {
+        return level;
     }
 
-    public void setWeatherMinMax(WeatherMinMax weatherMinMax) {
-        this.weatherMinMax = weatherMinMax;
+    public void setLevel(Level level) {
+        this.level = level;
     }
 
     public Float getTemperature() {
@@ -79,7 +79,7 @@ public class WeatherData {
                 ", country='" + country + '\'' +
                 ", date=" + date +
                 ", weatherGetType=" + weatherGetType +
-                ", weatherMinMax=" + weatherMinMax +
+                ", level=" + level +
                 ", temperature=" + temperature +
                 '}';
     }

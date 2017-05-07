@@ -4,7 +4,6 @@ import lt.soup.DateUtils;
 import lt.soup.weather.data.WeatherData;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -47,7 +46,7 @@ public class InMemoryDB implements Database {
                 .filter(r -> r.getCity().equals(line.getCity()))
                 .filter(r -> r.getCountry().equals(line.getCountry()))
                 .filter(r -> DateUtils.getDateAsString(r.getDate()).equals(DateUtils.getDateAsString(line.getDate())))
-                .filter(r -> r.getWeatherMinMax().equals(line.getWeatherMinMax()))
+                .filter(r -> r.getLevel().equals(line.getLevel()))
                 .filter(r -> r.getWeatherGetType().equals(line.getWeatherGetType()))
                 .count();
         return foundRecords == 0;

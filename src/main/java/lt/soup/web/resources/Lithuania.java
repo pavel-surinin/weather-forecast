@@ -1,15 +1,13 @@
 package lt.soup.web.resources;
 
-import lt.soup.DateUtils;
-import lt.soup.Forecast;
-import lt.soup.LoggerUtils;
-import lt.soup.SoupUtils;
+import lt.soup.*;
+import lt.soup.weather.data.Level;
 import org.apache.log4j.Logger;
+import org.jsoup.nodes.Element;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Comparator;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Created by Pavel on 2017-04-22.
@@ -36,10 +34,41 @@ public class Lithuania implements WebResource {
             forecast.setDay7Max(getTemperature(6, MAX));
             forecast.setDay7Min(getTemperature(6, MIN));
         } catch (Exception e) {
-            LoggerUtils.logFailedScrap(logger,city);
+            LoggerUtils.logFailedScrap(logger, city);
             return null;
         }
         return forecast;
+    }
+
+    @Override
+    public Actual getActual(String city) {
+        this.city = city;
+        Actual actual = new Actual(COUNTRY, city);
+        try {
+            actual.setMaxTemp(getActualTemp(Level.MAX));
+            actual.setMinTemp(getActualTemp(Level.MIN));
+            return actual;
+        } catch (Exception e) {
+            LoggerUtils.logFailedScrap(logger, city);
+            return null;
+        }
+    }
+
+    private Float getActualTemp(Level level) {
+        IntStream intStream = SoupUtils.getPage(LINK + SUFFIX + city)
+                .getElementsByClass(DateUtils.getDateAddForLt(0))
+                .stream()
+                .filter(element -> element.classNames().contains("hourly_weather"))
+                .findFirst()
+                .get()
+                .getElementsByAttributeValue("class", "temperature")
+                .stream()
+
+                .mapToInt(e -> Integer.valueOf(e.text().split(" ")[0]));
+        if (level.equals(Level.MIN)) return (float) intStream.min().getAsInt();
+        if (level.equals(Level.MAX)) return (float) intStream.max().getAsInt();
+
+    return null;
     }
 
     private Float getTemperature(int days, String daytime) throws Exception {
@@ -55,7 +84,7 @@ public class Lithuania implements WebResource {
                 .get()
                 .getElementsByClass("big").html();
         String temperature = html.split(" ")[0];
-        LoggerUtils.logTemperature(logger,COUNTRY,city,(days + 1),Float.valueOf(temperature));
+        LoggerUtils.logTemperature(logger, COUNTRY, city, (days + 1), Float.valueOf(temperature));
         return Float.parseFloat(temperature);
     }
 

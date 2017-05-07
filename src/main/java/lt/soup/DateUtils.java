@@ -113,4 +113,15 @@ public class DateUtils {
         }
         return date;
     }
+
+    public static String getTodayDateForLt() {
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        dt = c.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("MM.dd");
+        return dateFormat.format(dt);
+
+
+    }
 }

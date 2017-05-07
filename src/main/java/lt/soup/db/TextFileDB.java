@@ -1,9 +1,9 @@
 package lt.soup.db;
 
 import lt.soup.DateUtils;
+import lt.soup.weather.data.Level;
 import lt.soup.weather.data.WeatherData;
 import lt.soup.weather.data.WeatherGetType;
-import lt.soup.weather.data.WeatherMinMax;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -69,7 +69,7 @@ public class TextFileDB implements Database {
                             DateUtils.getDateAsString(line.getDate()) + DELIMITER +
                             line.getCountry() + DELIMITER +
                             line.getCity() + DELIMITER +
-                            line.getWeatherMinMax() + DELIMITER +
+                            line.getLevel() + DELIMITER +
                             line.getTemperature() + "\n"
             );
             File file = new File(PATH_TO_FILE_DB);
@@ -139,10 +139,10 @@ public class TextFileDB implements Database {
         weatherData.setDate(DateUtils.getDateFromString(values[2]));
         weatherData.setCountry(values[3]);
         weatherData.setCity(values[4]);
-        if (values[5].equals(WeatherMinMax.MIN.toString())) {
-            weatherData.setWeatherMinMax(WeatherMinMax.MIN);
+        if (values[5].equals(Level.MIN.toString())) {
+            weatherData.setLevel(Level.MIN);
         } else {
-            weatherData.setWeatherMinMax(WeatherMinMax.MAX);
+            weatherData.setLevel(Level.MAX);
         }
         weatherData.setTemperature(Float.valueOf(values[6]));
         return weatherData;
@@ -153,7 +153,7 @@ public class TextFileDB implements Database {
                 .filter(r -> r.getCity().equals(line.getCity()))
                 .filter(r -> r.getCountry().equals(line.getCountry()))
                 .filter(r -> DateUtils.getDateAsString(r.getDate()).equals(DateUtils.getDateAsString(line.getDate())))
-                .filter(r -> r.getWeatherMinMax().equals(line.getWeatherMinMax()))
+                .filter(r -> r.getLevel().equals(line.getLevel()))
                 .filter(r -> r.getWeatherGetType().equals(line.getWeatherGetType()))
                 .count();
         return foundRecords == 0;

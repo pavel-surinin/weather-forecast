@@ -1,5 +1,6 @@
 package lt.soup.web.resources;
 
+import lt.soup.Actual;
 import lt.soup.Forecast;
 import lt.soup.LoggerUtils;
 import lt.soup.SoupUtils;
@@ -37,6 +38,37 @@ public class England implements WebResource {
         }
     }
 
+    @Override
+    public Actual getActual(String city) {
+        if (this.city == null) this.city = city;
+        return scrapActual();
+    }
+
+    private Actual scrapActual() {
+        Document cityWeatherPage = getCityWeatherPage();
+        if (cityWeatherPage != null) {
+
+            String min = cityWeatherPage
+                    .getElementById("tabDay0")
+                    .getElementsByClass("tabDayValues")
+                    .get(0)
+                    .getElementsByAttributeValue("title", "Minimum nighttime temperature")
+                    .attr("data-value-raw");
+            String max = getCityWeatherPage()
+                    .getElementById("tabDay0")
+                    .getElementsByClass("tabDayValues")
+                    .get(0)
+                    .getElementsByAttributeValue("title", "Maximum daytime temperature")
+                    .attr("data-value-raw");
+            Actual actual = new Actual(COUNTRY, city);
+            actual.setMaxTemp(Float.valueOf(max));
+            actual.setMinTemp(Float.valueOf(min));
+            return actual;
+        } else {
+            return null;
+        }
+    }
+
     private Float getDay7Min(Document cityWeatherPage) {
         String attr = cityWeatherPage
                 .getElementById("tabDay6")
@@ -44,7 +76,7 @@ public class England implements WebResource {
                 .get(0)
                 .getElementsByAttributeValue("title", "Minimum nighttime temperature")
                 .attr("data-value-raw");
-        LoggerUtils.logTemperature(logger,COUNTRY,city,7,Float.valueOf(attr));
+        LoggerUtils.logTemperature(logger, COUNTRY, city, 7, Float.valueOf(attr));
         return Float.parseFloat(attr);
     }
 
@@ -55,7 +87,7 @@ public class England implements WebResource {
                 .get(0)
                 .getElementsByAttributeValue("title", "Maximum daytime temperature")
                 .attr("data-value-raw");
-        LoggerUtils.logTemperature(logger,COUNTRY,city,7,Float.valueOf(attr));
+        LoggerUtils.logTemperature(logger, COUNTRY, city, 7, Float.valueOf(attr));
         return Float.parseFloat(attr);
     }
 
@@ -66,7 +98,7 @@ public class England implements WebResource {
                 .get(0)
                 .getElementsByAttributeValue("title", "Maximum daytime temperature")
                 .attr("data-value-raw");
-        LoggerUtils.logTemperature(logger,COUNTRY,city,3,Float.valueOf(attr));
+        LoggerUtils.logTemperature(logger, COUNTRY, city, 3, Float.valueOf(attr));
         return Float.parseFloat(attr);
     }
 
@@ -77,7 +109,7 @@ public class England implements WebResource {
                 .get(0)
                 .getElementsByAttributeValue("title", "Minimum nighttime temperature")
                 .attr("data-value-raw");
-        LoggerUtils.logTemperature(logger,COUNTRY,city,3,Float.valueOf(attr));
+        LoggerUtils.logTemperature(logger, COUNTRY, city, 3, Float.valueOf(attr));
         return Float.parseFloat(attr);
     }
 

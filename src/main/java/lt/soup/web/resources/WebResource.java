@@ -1,5 +1,6 @@
 package lt.soup.web.resources;
 
+import lt.soup.Actual;
 import lt.soup.Forecast;
 
 /**
@@ -9,5 +10,8 @@ public interface WebResource {
 
     String getCountry();
     Forecast getForecast(String city);
+    Actual getActual(String city);
+
+    
 
 }

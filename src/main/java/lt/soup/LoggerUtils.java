@@ -27,7 +27,7 @@ public class LoggerUtils {
      * @param temperature
      */
     public static void logTemperature(Logger logger, String COUNTRY, String city, int days, float temperature){
-        logger.info(COUNTRY + ", " + city + " " + days + " days, temp: " + temperature + "°C");
+        logger.debug(COUNTRY + ", " + city + " " + days + " days, temp: " + temperature + "°C");
 
     }
 

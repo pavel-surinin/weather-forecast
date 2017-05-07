@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -24,8 +23,8 @@ public class WeatherDataFactoryTest {
     private static final float DAY_3_MIN = 10F;
     private static final float DAY_7_MAX = 22F;
     private static final float DAY_7_MIN = 12F;
-    public static final int DAYS3 = 2;
-    public static final int DAYS7 = 6;
+    private static final int DAYS3 = 2;
+    private static final int DAYS7 = 6;
     private Forecast forecastLT = new Forecast(LITHUANIA, VILNIUS);
     WeatherDataFactory weatherDataFactory;
 
@@ -44,7 +43,6 @@ public class WeatherDataFactoryTest {
         ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
         assertThat(isDatePresent(dataList,DAYS7), is(true));
         assertThat(isDatePresent(dataList,DAYS3), is(true));
-
     }
 
     private boolean isDatePresent(ArrayList<WeatherData> dataList, int days) {
@@ -71,7 +69,7 @@ public class WeatherDataFactoryTest {
     @Test
     public void shouldReturnDataMin3d() {
         ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
-        WeatherData weatherData = getWeatherData(dataList,WeatherMinMax.MIN, 2);
+        WeatherData weatherData = getWeatherData(dataList, Level.MIN, 2);
         assertThat(weatherData, notNullValue());
         assertThat(weatherData.getCountry(), is(LITHUANIA));
         assertThat(weatherData.getCity(), is(VILNIUS));
@@ -82,7 +80,7 @@ public class WeatherDataFactoryTest {
     @Test
     public void shouldReturnDataMin7d() {
         ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
-        WeatherData weatherData = getWeatherData(dataList,WeatherMinMax.MIN, 6);
+        WeatherData weatherData = getWeatherData(dataList, Level.MIN, 6);
         assertThat(weatherData, notNullValue());
         assertThat(weatherData.getCountry(), is(LITHUANIA));
         assertThat(weatherData.getCity(), is(VILNIUS));
@@ -93,7 +91,7 @@ public class WeatherDataFactoryTest {
     @Test
     public void shouldReturnDataMax3d() {
         ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
-        WeatherData weatherData = getWeatherData(dataList,WeatherMinMax.MAX, 2);
+        WeatherData weatherData = getWeatherData(dataList, Level.MAX, 2);
         assertThat(weatherData, notNullValue());
         assertThat(weatherData.getCountry(), is(LITHUANIA));
         assertThat(weatherData.getCity(), is(VILNIUS));
@@ -104,7 +102,7 @@ public class WeatherDataFactoryTest {
     @Test
     public void shouldReturnDataMax7d() {
         ArrayList<WeatherData> dataList = weatherDataFactory.getDataList();
-        WeatherData weatherData = getWeatherData(dataList,WeatherMinMax.MAX, 6);
+        WeatherData weatherData = getWeatherData(dataList, Level.MAX, 6);
         assertThat(weatherData, notNullValue());
         assertThat(weatherData.getCountry(), is(LITHUANIA));
         assertThat(weatherData.getCity(), is(VILNIUS));
@@ -112,9 +110,9 @@ public class WeatherDataFactoryTest {
         assertThat(weatherData.getTemperature(), is(DAY_7_MAX));
     }
 
-    private WeatherData getWeatherData(ArrayList<WeatherData> dataList, WeatherMinMax mm, int i) {
+    private WeatherData getWeatherData(ArrayList<WeatherData> dataList, Level mm, int i) {
         return dataList.stream()
-                .filter(d -> d.getWeatherMinMax() == mm)
+                .filter(d -> d.getLevel() == mm)
                 .filter(d -> getDate(d.getDate()).equals(getDatePlus(i)))
                 .findFirst()
                 .get();

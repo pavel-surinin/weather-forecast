@@ -1,7 +1,8 @@
 package lt.soup.analytics;
 
 import lt.soup.weather.data.WeatherData;
-import lt.soup.weather.data.WeatherMinMax;
+import lt.soup.weather.data.Level;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
  */
 public class Analyzer {
 
+    private static final Logger LOG = Logger.getLogger(Analyzer.class);
 
     public static List<AnalyticsReport> analyze(List<WeatherData> dataList) {
         return dataList
@@ -39,13 +41,13 @@ public class Analyzer {
             double max = listByDate
                     .stream()
                     .map(bd -> getDeltasByDay(bd))
-                    .mapToDouble(hm -> hm.get(WeatherMinMax.MAX))
+                    .mapToDouble(hm -> hm.get(Level.MAX))
                     .average()
                     .getAsDouble();
             double min = listByDate
                     .stream()
                     .map(bd -> getDeltasByDay(bd))
-                    .mapToDouble(hm -> hm.get(WeatherMinMax.MIN))
+                    .mapToDouble(hm -> hm.get(Level.MIN))
                     .average()
                     .getAsDouble();
             float average = new Double((min + max) / 2).floatValue();
@@ -53,19 +55,20 @@ public class Analyzer {
             AnalyticsReport report = new AnalyticsReport();
             report.setCountry(country);
             report.setAverageError(average);
+            LOG.info(country + " average error is " + average);
             return report;
         }
     }
 
-    private static Map<WeatherMinMax, Float> getDeltasByDay(List<WeatherData> bd) {
-        Map<WeatherMinMax, Float> deltas = new HashMap<>();
-        Map<WeatherMinMax, List<WeatherData>> byMinMax = bd.
+    private static Map<Level, Float> getDeltasByDay(List<WeatherData> bd) {
+        Map<Level, Float> deltas = new HashMap<>();
+        Map<Level, List<WeatherData>> byMinMax = bd.
                 stream().
-                collect(Collectors.groupingBy(WeatherData::getWeatherMinMax));
-        float deltaMin = byMinMax.get(WeatherMinMax.MIN).get(0).getTemperature() - byMinMax.get(WeatherMinMax.MIN).get(1).getTemperature();
-        float deltaMax = byMinMax.get(WeatherMinMax.MAX).get(0).getTemperature() - byMinMax.get(WeatherMinMax.MAX).get(1).getTemperature();
-        deltas.put(WeatherMinMax.MIN, Math.abs(deltaMin));
-        deltas.put(WeatherMinMax.MAX, Math.abs(deltaMax));
+                collect(Collectors.groupingBy(WeatherData::getLevel));
+        float deltaMin = byMinMax.get(Level.MIN).get(0).getTemperature() - byMinMax.get(Level.MIN).get(1).getTemperature();
+        float deltaMax = byMinMax.get(Level.MAX).get(0).getTemperature() - byMinMax.get(Level.MAX).get(1).getTemperature();
+        deltas.put(Level.MIN, Math.abs(deltaMin));
+        deltas.put(Level.MAX, Math.abs(deltaMax));
         return deltas;
     }
 }

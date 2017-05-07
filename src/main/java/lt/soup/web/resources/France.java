@@ -1,15 +1,20 @@
 package lt.soup.web.resources;
 
+import lt.soup.Actual;
 import lt.soup.Forecast;
 import lt.soup.LoggerUtils;
 import lt.soup.SoupUtils;
+import lt.soup.weather.data.Level;
 import org.apache.log4j.Logger;
 import org.jsoup.nodes.Document;
+
+import java.util.stream.Stream;
 
 /**
  * Created by Pavel on 2017-04-22.
  */
 public class France implements WebResource {
+    private static final int TODAY = 1;
     private static final String COUNTRY = "France";
     private static final String LINK = "http://www.vigilance-meteo.fr";
     private Logger logger = Logger.getLogger(France.class);
@@ -25,14 +30,29 @@ public class France implements WebResource {
         Forecast forecast = new Forecast(COUNTRY, city);
         cityPage = getCityPage();
         if (cityPage != null) {
-            forecast.setDay3Max(get3DayMin());
-            forecast.setDay3Min(get3DayMax());
+            forecast.setDay3Max(get3DayMax());
+            forecast.setDay3Min(get3DayMin());
             forecast.setDay7Min(get7Day(0));
             forecast.setDay7Max(get7Day(2));
             return forecast;
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Actual getActual(String city) {
+        if (this.city == null) this.city = city;
+        if (cityPage == null) this.cityPage = getCityPage();
+        Actual actual = new Actual(COUNTRY, city);
+        try {
+            actual.setMinTemp(getTemperature(TODAY, Level.MIN));
+            actual.setMaxTemp(getTemperature(TODAY, Level.MAX));
+        } catch (Exception e) {
+            LoggerUtils.logFailedScrap(logger,city);
+            return null;
+        }
+        return actual;
     }
 
     /**
@@ -76,6 +96,29 @@ public class France implements WebResource {
                 .min(Integer::compareTo)
                 .get();
         LoggerUtils.logTemperature(logger, COUNTRY, city, 3, Float.valueOf(temperature));
+        return temperature.floatValue();
+    }
+
+    /**
+     * Gets temperature for 3days or actual weather
+     *
+     * @param day   today 1, 3 days forecast 3
+     * @param level min or max temperature of the day from Level enum
+     * @return temperature
+     */
+    private Float getTemperature(int day, Level level) throws Exception {
+        Stream<Integer> daysTemperatures = cityPage
+                .getElementById("detail-table-" + (day - 1))
+                .getElementsByAttributeValue("title", "Température")
+                .stream()
+                .map(e -> Integer.valueOf(e.text().split(" ")[0]));
+        Integer temperature;
+        if (level.equals(Level.MAX)) {
+            temperature = daysTemperatures.max(Integer::compareTo).get();
+        } else {
+            temperature = daysTemperatures.min(Integer::compareTo).get();
+        }
+        LoggerUtils.logTemperature(logger, COUNTRY, city, 3, (float) temperature);
         return temperature.floatValue();
     }
 

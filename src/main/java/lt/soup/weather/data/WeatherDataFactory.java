@@ -19,6 +19,8 @@ public class WeatherDataFactory {
         this.forecasts = forecasts;
     }
 
+
+
     public ArrayList<WeatherData> getDataList() {
         for (Forecast forecast : forecasts) {
             dataList.add(get3dMaxData(forecast));
@@ -35,7 +37,7 @@ public class WeatherDataFactory {
         data.setCity(forecast.getCity());
         data.setDate(DateUtils.getDateAdd(DAYS7));
         data.setTemperature(forecast.getDay7Min());
-        data.setWeatherMinMax(WeatherMinMax.MIN);
+        data.setLevel(Level.MIN);
         data.setWeatherGetType(WeatherGetType.FORECAST);
         return data;
     }
@@ -46,7 +48,7 @@ public class WeatherDataFactory {
         data.setCity(forecast.getCity());
         data.setDate(DateUtils.getDateAdd(DAYS7));
         data.setTemperature(forecast.getDay7Max());
-        data.setWeatherMinMax(WeatherMinMax.MAX);
+        data.setLevel(Level.MAX);
         data.setWeatherGetType(WeatherGetType.FORECAST);
         return data;
     }
@@ -57,7 +59,7 @@ public class WeatherDataFactory {
         data.setCity(forecast.getCity());
         data.setDate(DateUtils.getDateAdd(DAYS3));
         data.setTemperature(forecast.getDay3Min());
-        data.setWeatherMinMax(WeatherMinMax.MIN);
+        data.setLevel(Level.MIN);
         data.setWeatherGetType(WeatherGetType.FORECAST);
         return data;
     }
@@ -68,7 +70,7 @@ public class WeatherDataFactory {
         data.setCity(forecast.getCity());
         data.setDate(DateUtils.getDateAdd(DAYS3));
         data.setTemperature(forecast.getDay3Max());
-        data.setWeatherMinMax(WeatherMinMax.MAX);
+        data.setLevel(Level.MAX);
         data.setWeatherGetType(WeatherGetType.FORECAST);
         return data;
     }

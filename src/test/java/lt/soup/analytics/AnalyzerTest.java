@@ -1,9 +1,9 @@
 package lt.soup.analytics;
 
 import lt.soup.DateUtils;
+import lt.soup.weather.data.Level;
 import lt.soup.weather.data.WeatherData;
 import lt.soup.weather.data.WeatherGetType;
-import lt.soup.weather.data.WeatherMinMax;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,23 +32,23 @@ public class AnalyzerTest {
     public void setUp(){
         dataList.clear();
         //average err 3
-        getWD(WeatherMinMax.MAX,WeatherGetType.FORECAST, DATE_10, 6F, COUNTRY);
-        getWD(WeatherMinMax.MAX,WeatherGetType.ACTUAL, DATE_10, 10F,COUNTRY);
-        getWD(WeatherMinMax.MAX,WeatherGetType.FORECAST, DATE_11, 6F,COUNTRY);
-        getWD(WeatherMinMax.MAX,WeatherGetType.ACTUAL, DATE_11, 3F,COUNTRY);
-        getWD(WeatherMinMax.MAX,WeatherGetType.FORECAST, DATE_12, 10F,COUNTRY);
-        getWD(WeatherMinMax.MAX,WeatherGetType.ACTUAL, DATE_12, 8F,COUNTRY);
+        getWD(Level.MAX,WeatherGetType.FORECAST, DATE_10, 6F, COUNTRY);
+        getWD(Level.MAX,WeatherGetType.ACTUAL, DATE_10, 10F,COUNTRY);
+        getWD(Level.MAX,WeatherGetType.FORECAST, DATE_11, 6F,COUNTRY);
+        getWD(Level.MAX,WeatherGetType.ACTUAL, DATE_11, 3F,COUNTRY);
+        getWD(Level.MAX,WeatherGetType.FORECAST, DATE_12, 10F,COUNTRY);
+        getWD(Level.MAX,WeatherGetType.ACTUAL, DATE_12, 8F,COUNTRY);
         //average err 1
-        getWD(WeatherMinMax.MIN,WeatherGetType.FORECAST, DATE_10, 3F,COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.ACTUAL, DATE_10, 3F,COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.FORECAST, DATE_11, 5F,COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.ACTUAL, DATE_11, 5F,COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.FORECAST, DATE_12, 10F,COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.ACTUAL, DATE_12, 7F,COUNTRY);
+        getWD(Level.MIN,WeatherGetType.FORECAST, DATE_10, 3F,COUNTRY);
+        getWD(Level.MIN,WeatherGetType.ACTUAL, DATE_10, 3F,COUNTRY);
+        getWD(Level.MIN,WeatherGetType.FORECAST, DATE_11, 5F,COUNTRY);
+        getWD(Level.MIN,WeatherGetType.ACTUAL, DATE_11, 5F,COUNTRY);
+        getWD(Level.MIN,WeatherGetType.FORECAST, DATE_12, 10F,COUNTRY);
+        getWD(Level.MIN,WeatherGetType.ACTUAL, DATE_12, 7F,COUNTRY);
         //add other country
-        getWD(WeatherMinMax.MIN,WeatherGetType.FORECAST, DATE_10, 3F, OTHER_COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.FORECAST, DATE_11, 3F, OTHER_COUNTRY);
-        getWD(WeatherMinMax.MIN,WeatherGetType.FORECAST, DATE_12, 3F, OTHER_COUNTRY);
+        getWD(Level.MIN,WeatherGetType.FORECAST, DATE_10, 3F, OTHER_COUNTRY);
+        getWD(Level.MIN,WeatherGetType.FORECAST, DATE_11, 3F, OTHER_COUNTRY);
+        getWD(Level.MIN,WeatherGetType.FORECAST, DATE_12, 3F, OTHER_COUNTRY);
     }
 
     @Test
@@ -62,11 +62,11 @@ public class AnalyzerTest {
 
     }
 
-    private void getWD(WeatherMinMax mm, WeatherGetType type, String dateStr, Float temp, String country) {
+    private void getWD(Level mm, WeatherGetType type, String dateStr, Float temp, String country) {
         WeatherData weatherData = new WeatherData();
         weatherData.setCountry(country);
         weatherData.setCity(CITY);
-        weatherData.setWeatherMinMax(mm);
+        weatherData.setLevel(mm);
         weatherData.setWeatherGetType(type);
         Date dateFromString = DateUtils.getDateFromString(dateStr);
         weatherData.setDate(dateFromString);
